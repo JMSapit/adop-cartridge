@@ -1,27 +1,22 @@
-
 // Folders
 //def workspaceFolderName = "${WORKSPACE_NAME}"
 def projectFolderName = "${PROJECT_NAME}"
 
 // Jobs
-def buildMavenJob = mavenJob(projectFolderName + "/Cartridge_Build_CurrencyConverter_Maven")
-def buildSonarJob = freeStyleJob(projectFolderName + "/Cartridge_Scan_CurrencyConverter_Sonarqube")
-def buildNexusSnapshotsJob = freeStyleJob(projectFolderName + "/Cartridge_CurrencyConverter_Nexus_Snapshots")
-def buildAnsibleJob = freeStyleJob(projectFolderName + "/Cartridge_Deploy_CurrencyConverter_Ansible")
-def buildSeleniumJob = freeStyleJob(projectFolderName + "/Cartridge_Test_CurrencyConverter_Selenium")
-def buildNexusReleasesJob = freeStyleJob(projectFolderName + "/Cartridge_CurrencyConverter_Nexus_Releases")
+def cartridge_build = freeStyleJob(projectFolderName + "/build_job")
 
 // Views
-def pipelineView = buildPipelineView(projectFolderName + "/Cartridge_CurrencyConverter_Pipeline")
+def pipelineView = buildPipelineView(projectFolderName + "/Sample-Pipeline")
 
 pipelineView.with{
-    title('Cartridge_CurrencyConverter_Pipeline')
+    title('Sample-Pipeline')
     displayedBuilds(10)
-    selectedJob(projectFolderName + "/Cartridge_Build_CurrencyConverter_Maven")
+    selectedJob(projectFolderName + "/build_job")
     showPipelineParameters()
     showPipelineDefinitionHeader()
     refreshFrequency(5)
 }
+
 
 cartridge_build.with{
 
@@ -57,11 +52,7 @@ cartridge_build.with{
 mkdir target
 tar --exclude='./.git' --exclude='./target' -zcvf ./target/sample.tar .''')
     }
-    publishers{
-    	downstream('<name of next job>','SUCCESS') 
-    }
 
    
   }
 }
-
